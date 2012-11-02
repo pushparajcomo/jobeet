@@ -266,11 +266,11 @@ class appDevDebugProjectContainer extends Container
      * This service is shared.
      * This method always returns the same instance of the service.
      *
-     * @return EntityManager50935b6dd57a8_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager A EntityManager50935b6dd57a8_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager instance.
+     * @return EntityManager509381e483344_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager A EntityManager509381e483344_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager instance.
      */
     protected function getDoctrine_Orm_DefaultEntityManagerService()
     {
-        require_once '/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_50935b6dd57a8.php';
+        require_once '/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_509381e483344.php';
 
         $a = new \Doctrine\Common\Cache\ArrayCache();
         $a->setNamespace('sf2orm_default_f4c4f71ccd892b537b54d147a01ac9df');
@@ -303,7 +303,7 @@ class appDevDebugProjectContainer extends Container
         $g = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $f);
         $this->get('doctrine.orm.default_manager_configurator')->configure($g);
 
-        return $this->services['doctrine.orm.default_entity_manager'] = new \EntityManager50935b6dd57a8_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager($g, $this);
+        return $this->services['doctrine.orm.default_entity_manager'] = new \EntityManager509381e483344_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager($g, $this);
     }
 
     /**
@@ -1233,7 +1233,7 @@ class appDevDebugProjectContainer extends Container
         $d = new \Symfony\Component\HttpKernel\DataCollector\EventDataCollector();
         $d->setEventDispatcher($this->get('event_dispatcher'));
 
-        $e = new \Symfony\Bridge\Doctrine\DataCollector\DoctrineDataCollector($this->get('doctrine'));
+        $e = new \Doctrine\Bundle\DoctrineBundle\DataCollector\DoctrineDataCollector($this->get('doctrine'));
         $e->addLogger('default', $this->get('doctrine.dbal.logger.profiling.default'));
 
         $this->services['profiler'] = $instance = new \Symfony\Component\HttpKernel\Profiler\Profiler(new \Symfony\Component\HttpKernel\Profiler\FileProfilerStorage('file:/home/pushparaj/projects/jobeet/app/cache/dev/profiler', '', '', 86400), $a);
@@ -2582,7 +2582,7 @@ class appDevDebugProjectContainer extends Container
     /**
      * Gets the doctrine.orm.entity_manager service alias.
      *
-     * @return EntityManager50935b6dd57a8_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager An instance of the doctrine.orm.default_entity_manager service
+     * @return EntityManager509381e483344_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager An instance of the doctrine.orm.default_entity_manager service
      */
     protected function getDoctrine_Orm_EntityManagerService()
     {
@@ -3236,6 +3236,7 @@ class appDevDebugProjectContainer extends Container
             'monolog.handler.debug.class' => 'Symfony\\Bridge\\Monolog\\Handler\\DebugHandler',
             'monolog.handler.swift_mailer.class' => 'Monolog\\Handler\\SwiftMailerHandler',
             'monolog.handler.native_mailer.class' => 'Monolog\\Handler\\NativeMailerHandler',
+            'monolog.handler.socket.class' => 'Monolog\\Handler\\SocketHandler',
             'monolog.handler.fingers_crossed.class' => 'Monolog\\Handler\\FingersCrossedHandler',
             'monolog.handler.fingers_crossed.error_level_activation_strategy.class' => 'Monolog\\Handler\\FingersCrossed\\ErrorLevelActivationStrategy',
             'monolog.handlers_to_channels' => array(
@@ -3269,6 +3270,9 @@ class appDevDebugProjectContainer extends Container
             'swiftmailer.spool.enabled' => true,
             'swiftmailer.sender_address' => NULL,
             'swiftmailer.single_address' => NULL,
+            'swiftmailer.delivery_whitelist' => array(
+
+            ),
             'assetic.asset_factory.class' => 'Symfony\\Bundle\\AsseticBundle\\Factory\\AssetFactory',
             'assetic.asset_manager.class' => 'Assetic\\Factory\\LazyAssetManager',
             'assetic.asset_manager_cache_warmer.class' => 'Symfony\\Bundle\\AsseticBundle\\CacheWarmer\\AssetManagerCacheWarmer',
@@ -3318,7 +3322,7 @@ class appDevDebugProjectContainer extends Container
             'doctrine.dbal.logger.profiling.class' => 'Doctrine\\DBAL\\Logging\\DebugStack',
             'doctrine.dbal.logger.class' => 'Symfony\\Bridge\\Doctrine\\Logger\\DbalLogger',
             'doctrine.dbal.configuration.class' => 'Doctrine\\DBAL\\Configuration',
-            'doctrine.data_collector.class' => 'Symfony\\Bridge\\Doctrine\\DataCollector\\DoctrineDataCollector',
+            'doctrine.data_collector.class' => 'Doctrine\\Bundle\\DoctrineBundle\\DataCollector\\DoctrineDataCollector',
             'doctrine.dbal.connection.event_manager.class' => 'Symfony\\Bridge\\Doctrine\\ContainerAwareEventManager',
             'doctrine.dbal.connection_factory.class' => 'Doctrine\\Bundle\\DoctrineBundle\\ConnectionFactory',
             'doctrine.dbal.events.mysql_session_init.class' => 'Doctrine\\DBAL\\Event\\Listeners\\MysqlSessionInit',
@@ -3401,8 +3405,8 @@ class appDevDebugProjectContainer extends Container
             ),
             'jms_di_extra.cache_dir' => '/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra',
             'jms_di_extra.doctrine_integration' => true,
-            'jms_di_extra.doctrine_integration.entity_manager.file' => '/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_50935b6dd57a8.php',
-            'jms_di_extra.doctrine_integration.entity_manager.class' => 'EntityManager50935b6dd57a8_546a8d27f194334ee012bfe64f629947b07e4919\\__CG__\\Doctrine\\ORM\\EntityManager',
+            'jms_di_extra.doctrine_integration.entity_manager.file' => '/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_509381e483344.php',
+            'jms_di_extra.doctrine_integration.entity_manager.class' => 'EntityManager509381e483344_546a8d27f194334ee012bfe64f629947b07e4919\\__CG__\\Doctrine\\ORM\\EntityManager',
             'security.secured_services' => array(
 
             ),

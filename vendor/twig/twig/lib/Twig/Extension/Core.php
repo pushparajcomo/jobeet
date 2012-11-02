@@ -62,6 +62,10 @@ class Twig_Extension_Core extends Twig_Extension
      */
     public function getTimezone()
     {
+        if (null === $this->timezone) {
+            $this->timezone = new DateTimeZone(date_default_timezone_get());
+        }
+
         return $this->timezone;
     }
 
@@ -224,11 +228,11 @@ class Twig_Extension_Core extends Twig_Extension
                 '+'   => array('precedence' => 500, 'class' => 'Twig_Node_Expression_Unary_Pos'),
             ),
             array(
-                'b-and'  => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseAnd', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                'b-xor'  => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseXor', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                'b-or'   => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseOr', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'or'     => array('precedence' => 10, 'class' => 'Twig_Node_Expression_Binary_Or', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'and'    => array('precedence' => 15, 'class' => 'Twig_Node_Expression_Binary_And', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-or'   => array('precedence' => 16, 'class' => 'Twig_Node_Expression_Binary_BitwiseOr', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-xor'  => array('precedence' => 17, 'class' => 'Twig_Node_Expression_Binary_BitwiseXor', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-and'  => array('precedence' => 18, 'class' => 'Twig_Node_Expression_Binary_BitwiseAnd', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '=='     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_Equal', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '!='     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_NotEqual', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '<'      => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_Less', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
@@ -444,32 +448,29 @@ function twig_date_modify_filter(Twig_Environment $env, $date, $modifier)
  */
 function twig_date_converter(Twig_Environment $env, $date = null, $timezone = null)
 {
-    if (!$date instanceof DateTime) {
-        $asString = (string) $date;
+    // determine the timezone
+    if (null === $timezone) {
+        $timezone = $env->getExtension('core')->getTimezone();
+    } elseif (!$timezone instanceof DateTimeZone) {
+        $timezone = new DateTimeZone($timezone);
+    }
 
-        if (ctype_digit($asString) || (!empty($asString) && '-' === $asString[0] && ctype_digit(substr($asString, 1)))) {
-            $date = new DateTime('@'.$date);
-        } else {
-            $date = new DateTime($date);
-        }
-    } else {
+    if ($date instanceof DateTime) {
         $date = clone $date;
-    }
-
-    // set Timezone
-    if (null !== $timezone) {
-        if ($timezone instanceof DateTimeZone) {
-            $date->setTimezone($timezone);
-        } else {
-            $date->setTimezone(new DateTimeZone($timezone));
-        }
-    } elseif (($timezone = $env->getExtension('core')->getTimezone()) instanceof DateTimeZone) {
         $date->setTimezone($timezone);
-    } else {
-        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+
+        return $date;
     }
 
-    return $date;
+    $asString = (string) $date;
+    if (ctype_digit($asString) || (!empty($asString) && '-' === $asString[0] && ctype_digit(substr($asString, 1)))) {
+        $date = new DateTime('@'.$date);
+        $date->setTimezone($timezone);
+
+        return $date;
+    }
+
+    return new DateTime($date, $timezone);
 }
 
 /**
