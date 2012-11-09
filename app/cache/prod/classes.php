@@ -6523,7 +6523,7 @@ namespace
  */
 class Twig_Environment
 {
-    const VERSION = '1.10.3';
+    const VERSION = '1.11.0-DEV';
     protected $charset;
     protected $loader;
     protected $debug;
@@ -7147,7 +7147,7 @@ class Twig_Environment
                     } elseif ($parser instanceof Twig_TokenParserBrokerInterface) {
                         $this->parsers->addTokenParserBroker($parser);
                     } else {
-                        throw new Twig_Error_Runtime('getTokenParsers() must return an array of Twig_TokenParserInterface or Twig_TokenParserBrokerInterface instances');
+                        throw new LogicException('getTokenParsers() must return an array of Twig_TokenParserInterface or Twig_TokenParserBrokerInterface instances');
                     }
                 }
             }
@@ -7482,7 +7482,7 @@ class Twig_Environment
                 return;
             }
         }
-        throw new Twig_Error_Runtime(sprintf('Failed to write cache file "%s".', $file));
+        throw new RuntimeException(sprintf('Failed to write cache file "%s".', $file));
     }
 }
 
@@ -7716,6 +7716,9 @@ class Twig_Extension_Core extends Twig_Extension
      */
     public function getTimezone()
     {
+        if (null === $this->timezone) {
+            $this->timezone = new DateTimeZone(date_default_timezone_get());
+        }
         return $this->timezone;
     }
     /**
@@ -7862,11 +7865,11 @@ class Twig_Extension_Core extends Twig_Extension
                 '+'   => array('precedence' => 500, 'class' => 'Twig_Node_Expression_Unary_Pos'),
             ),
             array(
-                'b-and'  => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseAnd', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                'b-xor'  => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseXor', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
-                'b-or'   => array('precedence' => 5, 'class' => 'Twig_Node_Expression_Binary_BitwiseOr', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'or'     => array('precedence' => 10, 'class' => 'Twig_Node_Expression_Binary_Or', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 'and'    => array('precedence' => 15, 'class' => 'Twig_Node_Expression_Binary_And', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-or'   => array('precedence' => 16, 'class' => 'Twig_Node_Expression_Binary_BitwiseOr', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-xor'  => array('precedence' => 17, 'class' => 'Twig_Node_Expression_Binary_BitwiseXor', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
+                'b-and'  => array('precedence' => 18, 'class' => 'Twig_Node_Expression_Binary_BitwiseAnd', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '=='     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_Equal', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '!='     => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_NotEqual', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
                 '<'      => array('precedence' => 20, 'class' => 'Twig_Node_Expression_Binary_Less', 'associativity' => Twig_ExpressionParser::OPERATOR_LEFT),
@@ -8057,29 +8060,24 @@ function twig_date_modify_filter(Twig_Environment $env, $date, $modifier)
  */
 function twig_date_converter(Twig_Environment $env, $date = null, $timezone = null)
 {
-    if (!$date instanceof DateTime) {
-        $asString = (string) $date;
-        if (ctype_digit($asString) || (!empty($asString) && '-' === $asString[0] && ctype_digit(substr($asString, 1)))) {
-            $date = new DateTime('@'.$date);
-        } else {
-            $date = new DateTime($date);
-        }
-    } else {
+    // determine the timezone
+    if (null === $timezone) {
+        $timezone = $env->getExtension('core')->getTimezone();
+    } elseif (!$timezone instanceof DateTimeZone) {
+        $timezone = new DateTimeZone($timezone);
+    }
+    if ($date instanceof DateTime) {
         $date = clone $date;
-    }
-    // set Timezone
-    if (null !== $timezone) {
-        if ($timezone instanceof DateTimeZone) {
-            $date->setTimezone($timezone);
-        } else {
-            $date->setTimezone(new DateTimeZone($timezone));
-        }
-    } elseif (($timezone = $env->getExtension('core')->getTimezone()) instanceof DateTimeZone) {
         $date->setTimezone($timezone);
-    } else {
-        $date->setTimezone(new DateTimeZone(date_default_timezone_get()));
+        return $date;
     }
-    return $date;
+    $asString = (string) $date;
+    if (ctype_digit($asString) || (!empty($asString) && '-' === $asString[0] && ctype_digit(substr($asString, 1)))) {
+        $date = new DateTime('@'.$date);
+        $date->setTimezone($timezone);
+        return $date;
+    }
+    return new DateTime($date, $timezone);
 }
 /**
  * Number format filter.
@@ -9244,6 +9242,15 @@ abstract class Twig_Template implements Twig_TemplateInterface
         try {
             $this->doDisplay($context, $blocks);
         } catch (Twig_Error $e) {
+            if (!$e->getTemplateFile()) {
+                $e->setTemplateFile($this->getTemplateName());
+            }
+            // this is mostly useful for Twig_Error_Loader exceptions
+            // see Twig_Error_Loader
+            if (false === $e->getTemplateLine()) {
+                $e->setTemplateLine(-1);
+                $e->guess();
+            }
             throw $e;
         } catch (Exception $e) {
             throw new Twig_Error_Runtime(sprintf('An exception has been thrown during the rendering of a template ("%s").', $e->getMessage()), -1, null, $e);
@@ -9320,11 +9327,11 @@ abstract class Twig_Template implements Twig_TemplateInterface
                     return null;
                 }
                 if (is_object($object)) {
-                    throw new Twig_Error_Runtime(sprintf('Key "%s" in object (with ArrayAccess) of type "%s" does not exist', $item, get_class($object)));
+                    throw new Twig_Error_Runtime(sprintf('Key "%s" in object (with ArrayAccess) of type "%s" does not exist', $item, get_class($object)), -1, $this->getTemplateName());
                 } elseif (is_array($object)) {
-                    throw new Twig_Error_Runtime(sprintf('Key "%s" for array with keys "%s" does not exist', $item, implode(', ', array_keys($object))));
+                    throw new Twig_Error_Runtime(sprintf('Key "%s" for array with keys "%s" does not exist', $item, implode(', ', array_keys($object))), -1, $this->getTemplateName());
                 } else {
-                    throw new Twig_Error_Runtime(sprintf('Impossible to access a key ("%s") on a "%s" variable', $item, gettype($object)));
+                    throw new Twig_Error_Runtime(sprintf('Impossible to access a key ("%s") on a "%s" variable', $item, gettype($object)), -1, $this->getTemplateName());
                 }
             }
         }
@@ -9335,7 +9342,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
             if ($ignoreStrictCheck || !$this->env->isStrictVariables()) {
                 return null;
             }
-            throw new Twig_Error_Runtime(sprintf('Item "%s" for "%s" does not exist', $item, is_array($object) ? 'Array' : $object));
+            throw new Twig_Error_Runtime(sprintf('Item "%s" for "%s" does not exist', $item, is_array($object) ? 'Array' : $object), -1, $this->getTemplateName());
         }
         $class = get_class($object);
         // object property
@@ -9370,7 +9377,7 @@ abstract class Twig_Template implements Twig_TemplateInterface
             if ($ignoreStrictCheck || !$this->env->isStrictVariables()) {
                 return null;
             }
-            throw new Twig_Error_Runtime(sprintf('Method "%s" for object "%s" does not exist', $item, get_class($object)));
+            throw new Twig_Error_Runtime(sprintf('Method "%s" for object "%s" does not exist', $item, get_class($object)), -1, $this->getTemplateName());
         }
         if ($isDefinedTest) {
             return true;
@@ -9559,7 +9566,7 @@ class LineFormatter extends NormalizerFormatter
             return json_encode($this->normalize($data), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
         }
 
-        return stripslashes(json_encode($this->normalize($data)));
+        return str_replace('\\/', '/', json_encode($this->normalize($data)));
     }
 }
 }
@@ -10086,8 +10093,8 @@ class Logger
     {
         $this->name = $name;
 
-        if (!self::$timezone) {
-            self::$timezone = new \DateTimeZone(date_default_timezone_get() ?: 'UTC');
+        if (!static::$timezone) {
+            static::$timezone = new \DateTimeZone(date_default_timezone_get() ?: 'UTC');
         }
     }
 
@@ -10136,15 +10143,15 @@ class Logger
     public function addRecord($level, $message, array $context = array())
     {
         if (!$this->handlers) {
-            $this->pushHandler(new StreamHandler('php://stderr', self::DEBUG));
+            $this->pushHandler(new StreamHandler('php://stderr', static::DEBUG));
         }
         $record = array(
             'message' => (string) $message,
             'context' => $context,
             'level' => $level,
-            'level_name' => self::getLevelName($level),
+            'level_name' => static::getLevelName($level),
             'channel' => $this->name,
-            'datetime' => \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)))->setTimeZone(self::$timezone),
+            'datetime' => \DateTime::createFromFormat('U.u', sprintf('%.6F', microtime(true)), static::$timezone)->setTimezone(static::$timezone),
             'extra' => array(),
         );
                 $handlerKey = null;
@@ -10171,55 +10178,55 @@ class Logger
     
     public function addDebug($message, array $context = array())
     {
-        return $this->addRecord(self::DEBUG, $message, $context);
+        return $this->addRecord(static::DEBUG, $message, $context);
     }
 
     
     public function addInfo($message, array $context = array())
     {
-        return $this->addRecord(self::INFO, $message, $context);
+        return $this->addRecord(static::INFO, $message, $context);
     }
 
     
     public function addNotice($message, array $context = array())
     {
-        return $this->addRecord(self::NOTICE, $message, $context);
+        return $this->addRecord(static::NOTICE, $message, $context);
     }
 
     
     public function addWarning($message, array $context = array())
     {
-        return $this->addRecord(self::WARNING, $message, $context);
+        return $this->addRecord(static::WARNING, $message, $context);
     }
 
     
     public function addError($message, array $context = array())
     {
-        return $this->addRecord(self::ERROR, $message, $context);
+        return $this->addRecord(static::ERROR, $message, $context);
     }
 
     
     public function addCritical($message, array $context = array())
     {
-        return $this->addRecord(self::CRITICAL, $message, $context);
+        return $this->addRecord(static::CRITICAL, $message, $context);
     }
 
     
     public function addAlert($message, array $context = array())
     {
-        return $this->addRecord(self::ALERT, $message, $context);
+        return $this->addRecord(static::ALERT, $message, $context);
     }
 
     
     public function addEmergency($message, array $context = array())
     {
-      return $this->addRecord(self::EMERGENCY, $message, $context);
+      return $this->addRecord(static::EMERGENCY, $message, $context);
     }
 
     
     public static function getLevelName($level)
     {
-        return self::$levels[$level];
+        return static::$levels[$level];
     }
 
     
@@ -10229,9 +10236,9 @@ class Logger
             'message' => '',
             'context' => array(),
             'level' => $level,
-            'level_name' => self::getLevelName($level),
+            'level_name' => static::getLevelName($level),
             'channel' => $this->name,
-            'datetime' => new \DateTime(),
+            'datetime' => new \DateTime('now', static::$timezone),
             'extra' => array(),
         );
 
@@ -10247,49 +10254,49 @@ class Logger
     
     public function debug($message, array $context = array())
     {
-        return $this->addRecord(self::DEBUG, $message, $context);
+        return $this->addRecord(static::DEBUG, $message, $context);
     }
 
     
     public function info($message, array $context = array())
     {
-        return $this->addRecord(self::INFO, $message, $context);
+        return $this->addRecord(static::INFO, $message, $context);
     }
 
     
     public function notice($message, array $context = array())
     {
-        return $this->addRecord(self::NOTICE, $message, $context);
+        return $this->addRecord(static::NOTICE, $message, $context);
     }
 
     
     public function warn($message, array $context = array())
     {
-        return $this->addRecord(self::WARNING, $message, $context);
+        return $this->addRecord(static::WARNING, $message, $context);
     }
 
     
     public function err($message, array $context = array())
     {
-        return $this->addRecord(self::ERROR, $message, $context);
+        return $this->addRecord(static::ERROR, $message, $context);
     }
 
     
     public function crit($message, array $context = array())
     {
-        return $this->addRecord(self::CRITICAL, $message, $context);
+        return $this->addRecord(static::CRITICAL, $message, $context);
     }
 
     
     public function alert($message, array $context = array())
     {
-        return $this->addRecord(self::ALERT, $message, $context);
+        return $this->addRecord(static::ALERT, $message, $context);
     }
 
     
     public function emerg($message, array $context = array())
     {
-        return $this->addRecord(self::EMERGENCY, $message, $context);
+        return $this->addRecord(static::EMERGENCY, $message, $context);
     }
 }
 }

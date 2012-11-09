@@ -3,6 +3,7 @@
 namespace Push\JobeetBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Push\JobeetBundle\Utils\Jobeet as Jobeet;
 
 /**
  * Push\JobeetBundle\Entity\Job
@@ -491,6 +492,10 @@ class Job
     public function setCreatedAtValue()
     {
         // Add your code here
+          if(!$this->getCreatedAt())
+          {
+            $this->created_at = new \DateTime();
+          }
     }
 
     /**
@@ -499,5 +504,51 @@ class Job
     public function setUpdatedAtValue()
     {
         // Add your code here
+          $this->updated_at = new \DateTime();
+    }
+    
+    
+    /**
+     * @var integer $id
+     */
+    private $id;
+
+
+    /**
+     * Get id
+     *
+     * @return integer 
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+    
+    public function getCompanySlug()
+    {
+        return Jobeet::slugify($this->getCompany());
+    }
+ 
+    public function getPositionSlug()
+    {
+        return Jobeet::slugify($this->getPosition());
+    }
+ 
+    public function getLocationSlug()
+    {
+        return Jobeet::slugify($this->getLocation());
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setExpiresAtValue()
+    {
+        // Add your code here
+        if(!$this->getExpiresAt())
+        {
+            $now = $this->getCreatedAt() ? $this->getCreatedAt()->format('U') : time();
+            $this->expires_at = new \DateTime(date('Y-m-d H:i:s', $now + 86400 * 30));
+        }
     }
 }

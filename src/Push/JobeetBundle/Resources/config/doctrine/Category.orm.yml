@@ -1,6 +1,7 @@
 # src/Push/JobeetBundle/Resources/config/doctrine/Category.orm.yml
 Push\JobeetBundle\Entity\Category:
   type: entity
+  repositoryClass: Push\JobeetBundle\Repository\CategoryRepository
   table: category
   id:
     id:
