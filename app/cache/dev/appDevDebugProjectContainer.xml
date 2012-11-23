@@ -21,6 +21,10 @@
       <parameter key="JMSSecurityExtraBundle">JMS\SecurityExtraBundle\JMSSecurityExtraBundle</parameter>
       <parameter key="PushJobeetBundle">Push\JobeetBundle\PushJobeetBundle</parameter>
       <parameter key="DoctrineFixturesBundle">Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle</parameter>
+      <parameter key="MopaBootstrapBundle">Mopa\Bundle\BootstrapBundle\MopaBootstrapBundle</parameter>
+      <parameter key="KnpMenuBundle">Knp\Bundle\MenuBundle\KnpMenuBundle</parameter>
+      <parameter key="KnpPaginatorBundle">Knp\Bundle\PaginatorBundle\KnpPaginatorBundle</parameter>
+      <parameter key="CraueFormFlowBundle">Craue\FormFlowBundle\CraueFormFlowBundle</parameter>
       <parameter key="AcmeDemoBundle">Acme\DemoBundle\AcmeDemoBundle</parameter>
       <parameter key="WebProfilerBundle">Symfony\Bundle\WebProfilerBundle\WebProfilerBundle</parameter>
       <parameter key="SensioDistributionBundle">Sensio\Bundle\DistributionBundle\SensioDistributionBundle</parameter>
@@ -284,6 +288,7 @@
     <parameter key="twig.exception_listener.controller">Symfony\Bundle\TwigBundle\Controller\ExceptionController::showAction</parameter>
     <parameter key="twig.form.resources" type="collection">
       <parameter>form_div_layout.html.twig</parameter>
+      <parameter>MopaBootstrapBundle:Form:fields.html.twig</parameter>
     </parameter>
     <parameter key="twig.options" type="collection">
       <parameter key="debug">true</parameter>
@@ -462,8 +467,8 @@
     <parameter key="jms_di_extra.directories" type="collection"/>
     <parameter key="jms_di_extra.cache_dir">/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra</parameter>
     <parameter key="jms_di_extra.doctrine_integration">true</parameter>
-    <parameter key="jms_di_extra.doctrine_integration.entity_manager.file">/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_509b544a1b0cc.php</parameter>
-    <parameter key="jms_di_extra.doctrine_integration.entity_manager.class">EntityManager509b544a1b0cc_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager</parameter>
+    <parameter key="jms_di_extra.doctrine_integration.entity_manager.file">/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_50adf78947228.php</parameter>
+    <parameter key="jms_di_extra.doctrine_integration.entity_manager.class">EntityManager50adf78947228_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager</parameter>
     <parameter key="security.secured_services" type="collection"/>
     <parameter key="security.access.method_interceptor.class">JMS\SecurityExtraBundle\Security\Authorization\Interception\MethodSecurityInterceptor</parameter>
     <parameter key="security.access.method_access_control" type="collection"/>
@@ -494,6 +499,50 @@
     <parameter key="security.authenticated_voter.disabled">false</parameter>
     <parameter key="security.role_voter.disabled">false</parameter>
     <parameter key="security.acl_voter.disabled">false</parameter>
+    <parameter key="mopa_bootstrap.form.templating">MopaBootstrapBundle:Form:fields.html.twig</parameter>
+    <parameter key="mopa_bootstrap.form.render_fieldset">true</parameter>
+    <parameter key="mopa_bootstrap.form.show_legend">true</parameter>
+    <parameter key="mopa_bootstrap.form.show_child_legend">false</parameter>
+    <parameter key="mopa_bootstrap.form.render_optional_text">true</parameter>
+    <parameter key="mopa_bootstrap.form.render_required_asterisk">false</parameter>
+    <parameter key="mopa_bootstrap.form.error_type">null</parameter>
+    <parameter key="mopa_bootstrap.form.collection.widget_remove_btn" type="collection">
+      <parameter key="attr" type="collection">
+        <parameter key="class">btn</parameter>
+      </parameter>
+      <parameter key="icon">null</parameter>
+      <parameter key="icon_color">null</parameter>
+    </parameter>
+    <parameter key="mopa_bootstrap.form.collection.widget_add_btn" type="collection">
+      <parameter key="attr" type="collection">
+        <parameter key="class">btn</parameter>
+      </parameter>
+      <parameter key="icon">null</parameter>
+      <parameter key="icon_color">null</parameter>
+    </parameter>
+    <parameter key="mopa_bootstrap.navbar.generic">Mopa\Bundle\BootstrapBundle\Navbar\GenericNavbar</parameter>
+    <parameter key="mopa_bootstrap.navbar.template">MopaBootstrapBundle:Navbar:navbar.html.twig</parameter>
+    <parameter key="knp_menu.factory.class">Knp\Menu\Silex\RouterAwareFactory</parameter>
+    <parameter key="knp_menu.helper.class">Knp\Menu\Twig\Helper</parameter>
+    <parameter key="knp_menu.matcher.class">Knp\Menu\Matcher\Matcher</parameter>
+    <parameter key="knp_menu.menu_provider.chain.class">Knp\Menu\Provider\ChainProvider</parameter>
+    <parameter key="knp_menu.menu_provider.container_aware.class">Knp\Bundle\MenuBundle\Provider\ContainerAwareProvider</parameter>
+    <parameter key="knp_menu.menu_provider.builder_alias.class">Knp\Bundle\MenuBundle\Provider\BuilderAliasProvider</parameter>
+    <parameter key="knp_menu.renderer_provider.class">Knp\Bundle\MenuBundle\Renderer\ContainerAwareProvider</parameter>
+    <parameter key="knp_menu.renderer.list.class">Knp\Menu\Renderer\ListRenderer</parameter>
+    <parameter key="knp_menu.renderer.list.options" type="collection"/>
+    <parameter key="knp_menu.twig.extension.class">Knp\Menu\Twig\MenuExtension</parameter>
+    <parameter key="knp_menu.renderer.twig.class">Knp\Menu\Renderer\TwigRenderer</parameter>
+    <parameter key="knp_menu.renderer.twig.options" type="collection"/>
+    <parameter key="knp_menu.renderer.twig.template">knp_menu.html.twig</parameter>
+    <parameter key="knp_menu.default_renderer">twig</parameter>
+    <parameter key="knp_paginator.class">Knp\Component\Pager\Paginator</parameter>
+    <parameter key="knp_paginator.template.pagination">KnpPaginatorBundle:Pagination:sliding.html.twig</parameter>
+    <parameter key="knp_paginator.template.sortable">KnpPaginatorBundle:Pagination:sortable_link.html.twig</parameter>
+    <parameter key="knp_paginator.page_range">5</parameter>
+    <parameter key="craue.form.flow.class">Craue\FormFlowBundle\Form\FormFlow</parameter>
+    <parameter key="craue.form.flow.storage.class">Craue\FormFlowBundle\Storage\SessionStorage</parameter>
+    <parameter key="craue_twig_extensions.formflow.class">Craue\FormFlowBundle\Twig\Extension\FormFlowExtension</parameter>
     <parameter key="web_profiler.debug_toolbar.class">Symfony\Bundle\WebProfilerBundle\EventListener\WebDebugToolbarListener</parameter>
     <parameter key="web_profiler.debug_toolbar.intercept_redirects">false</parameter>
     <parameter key="web_profiler.debug_toolbar.mode">2</parameter>
@@ -568,6 +617,38 @@
       <argument type="service" id="service_container"/>
       <argument type="service" id="debug.stopwatch"/>
       <argument type="service" id="monolog.logger.event"/>
+      <call method="addListenerService">
+        <argument>knp_pager.before</argument>
+        <argument type="collection">
+          <argument>knp_paginator.subscriber.paginate</argument>
+          <argument>before</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>knp_pager.pagination</argument>
+        <argument type="collection">
+          <argument>knp_paginator.subscriber.paginate</argument>
+          <argument>pagination</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>knp_pager.before</argument>
+        <argument type="collection">
+          <argument>knp_paginator.subscriber.sortable</argument>
+          <argument>before</argument>
+        </argument>
+        <argument>1</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>knp_pager.pagination</argument>
+        <argument type="collection">
+          <argument>knp_paginator.subscriber.sliding_pagination</argument>
+          <argument>pagination</argument>
+        </argument>
+        <argument>1</argument>
+      </call>
       <call method="addListenerService">
         <argument>kernel.controller</argument>
         <argument type="collection">
@@ -645,6 +726,22 @@
         <argument type="collection">
           <argument>sensio_framework_extra.cache.listener</argument>
           <argument>onKernelResponse</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument>knp_menu.listener.voters</argument>
+          <argument>onKernelRequest</argument>
+        </argument>
+        <argument>0</argument>
+      </call>
+      <call method="addListenerService">
+        <argument>kernel.request</argument>
+        <argument type="collection">
+          <argument>knp_paginator.subscriber.sliding_pagination</argument>
+          <argument>onKernelRequest</argument>
         </argument>
         <argument>0</argument>
       </call>
@@ -1026,6 +1123,11 @@
                 <argument>form.type_extension.form.http_foundation</argument>
                 <argument>form.type_extension.form.validator</argument>
                 <argument>form.type_extension.csrf</argument>
+                <argument>mopa.form.help_extension</argument>
+                <argument>mopa.form.legend_extension</argument>
+                <argument>mopa.form.error_type_extension</argument>
+                <argument>mopa.form.widget_extension</argument>
+                <argument>mopa.form.widget_collection_extension</argument>
               </argument>
               <argument key="repeated" type="collection">
                 <argument>form.type_extension.repeated.validator</argument>
@@ -1905,6 +2007,7 @@
                   <service class="Symfony\Bridge\Twig\Form\TwigRendererEngine" public="false">
                     <argument type="collection">
                       <argument>form_div_layout.html.twig</argument>
+                      <argument>MopaBootstrapBundle:Form:fields.html.twig</argument>
                     </argument>
                   </service>
                 </argument>
@@ -1944,6 +2047,25 @@
         </argument>
       </call>
       <call method="addExtension">
+        <argument type="service" id="mopa_bootstrap.navbar.twig.extension"/>
+      </call>
+      <call method="addExtension">
+        <argument type="service">
+          <service class="Knp\Menu\Twig\MenuExtension" public="false">
+            <tag name="twig.extension"/>
+            <argument type="service">
+              <service class="Knp\Menu\Twig\Helper" public="false">
+                <argument type="service" id="knp_menu.renderer_provider"/>
+                <argument type="service" id="knp_menu.menu_provider"/>
+              </service>
+            </argument>
+          </service>
+        </argument>
+      </call>
+      <call method="addExtension">
+        <argument type="service" id="twig.extension.craue_formflow"/>
+      </call>
+      <call method="addExtension">
         <argument type="service" id="twig.extension.acme.demo"/>
       </call>
     </service>
@@ -1952,6 +2074,9 @@
       <argument type="service" id="templating.name_parser"/>
       <call method="addPath">
         <argument>/home/pushparaj/projects/jobeet/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form</argument>
+      </call>
+      <call method="addPath">
+        <argument>/home/pushparaj/projects/jobeet/vendor/knplabs/knp-menu/src/Knp/Menu/Resources/views</argument>
       </call>
     </service>
     <service id="twig.translation.extractor" class="Symfony\Bridge\Twig\Translation\TwigExtractor">
@@ -2136,8 +2261,8 @@
     <service id="doctrine.orm.default_manager_configurator" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator">
       <argument type="collection"/>
     </service>
-    <service id="doctrine.orm.default_entity_manager" class="EntityManager509b544a1b0cc_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager">
-      <file>/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_509b544a1b0cc.php</file>
+    <service id="doctrine.orm.default_entity_manager" class="EntityManager50adf78947228_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager">
+      <file>/home/pushparaj/projects/jobeet/app/cache/dev/jms_diextra/doctrine/EntityManager_50adf78947228.php</file>
       <argument type="service">
         <service class="Doctrine\ORM\EntityManager" factory-method="create" public="false">
           <argument type="service" id="doctrine.dbal.default_connection"/>
@@ -2359,6 +2484,141 @@
           </service>
         </argument>
       </call>
+    </service>
+    <service id="mopa.form.help_extension" class="Mopa\Bundle\BootstrapBundle\Form\Extension\HelpFormTypeExtension">
+      <tag name="form.type_extension" alias="form"/>
+    </service>
+    <service id="mopa.form.legend_extension" class="Mopa\Bundle\BootstrapBundle\Form\Extension\LegendFormTypeExtension">
+      <tag name="form.type_extension" alias="form"/>
+      <argument type="collection">
+        <argument key="render_fieldset">true</argument>
+        <argument key="show_legend">true</argument>
+        <argument key="show_child_legend">false</argument>
+        <argument key="render_required_asterisk">false</argument>
+        <argument key="render_optional_text">true</argument>
+      </argument>
+    </service>
+    <service id="mopa.form.error_type_extension" class="Mopa\Bundle\BootstrapBundle\Form\Extension\ErrorTypeFormTypeExtension">
+      <tag name="form.type_extension" alias="form"/>
+      <argument type="collection">
+        <argument key="error_type">null</argument>
+      </argument>
+    </service>
+    <service id="mopa.form.widget_extension" class="Mopa\Bundle\BootstrapBundle\Form\Extension\WidgetFormTypeExtension">
+      <tag name="form.type_extension" alias="form"/>
+    </service>
+    <service id="mopa.form.widget_collection_extension" class="Mopa\Bundle\BootstrapBundle\Form\Extension\WidgetCollectionFormTypeExtension">
+      <tag name="form.type_extension" alias="form"/>
+      <argument type="collection">
+        <argument key="widget_add_btn" type="collection">
+          <argument key="attr" type="collection">
+            <argument key="class">btn</argument>
+          </argument>
+          <argument key="icon">null</argument>
+          <argument key="icon_color">null</argument>
+        </argument>
+        <argument key="widget_remove_btn" type="collection">
+          <argument key="attr" type="collection">
+            <argument key="class">btn</argument>
+          </argument>
+          <argument key="icon">null</argument>
+          <argument key="icon_color">null</argument>
+        </argument>
+      </argument>
+    </service>
+    <service id="mopa_bootstrap.navbar_renderer" class="Mopa\Bundle\BootstrapBundle\Navbar\Renderer\NavbarRenderer">
+      <tag name="knp_menu.renderer" alias="navbar"/>
+      <argument type="service" id="service_container"/>
+      <argument type="collection"/>
+    </service>
+    <service id="mopa_bootstrap.navbar.twig.extension" class="Mopa\Bundle\BootstrapBundle\Navbar\Twig\NavbarExtension">
+      <tag name="twig.extension"/>
+      <argument type="service" id="mopa_bootstrap.navbar_renderer"/>
+    </service>
+    <service id="knp_menu.factory" class="Knp\Menu\Silex\RouterAwareFactory">
+      <argument type="service" id="router"/>
+    </service>
+    <service id="knp_menu.matcher" class="Knp\Menu\Matcher\Matcher">
+      <call method="addVoter">
+        <argument type="service" id="knp_menu.voter.router"/>
+      </call>
+    </service>
+    <service id="knp_menu.renderer_provider" class="Knp\Bundle\MenuBundle\Renderer\ContainerAwareProvider">
+      <argument type="service" id="service_container"/>
+      <argument>twig</argument>
+      <argument type="collection">
+        <argument key="navbar">mopa_bootstrap.navbar_renderer</argument>
+        <argument key="list">knp_menu.renderer.list</argument>
+        <argument key="twig">knp_menu.renderer.twig</argument>
+      </argument>
+    </service>
+    <service id="knp_menu.renderer.list" class="Knp\Menu\Renderer\ListRenderer">
+      <tag name="knp_menu.renderer" alias="list"/>
+      <argument type="service" id="knp_menu.matcher"/>
+      <argument type="collection"/>
+      <argument>UTF-8</argument>
+    </service>
+    <service id="knp_menu.listener.voters" class="Knp\Bundle\MenuBundle\EventListener\VoterInitializerListener">
+      <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
+      <call method="addVoter">
+        <argument type="service" id="knp_menu.voter.router"/>
+      </call>
+    </service>
+    <service id="knp_menu.voter.router" class="Knp\Menu\Silex\Voter\RouteVoter">
+      <tag name="knp_menu.voter" request="1"/>
+    </service>
+    <service id="knp_menu.renderer.twig" class="Knp\Menu\Renderer\TwigRenderer">
+      <tag name="knp_menu.renderer" alias="twig"/>
+      <argument type="service" id="twig"/>
+      <argument>knp_menu.html.twig</argument>
+      <argument type="service" id="knp_menu.matcher"/>
+      <argument type="collection"/>
+    </service>
+    <service id="knp_paginator" class="Knp\Component\Pager\Paginator">
+      <argument type="service" id="event_dispatcher"/>
+      <call method="setDefaultPaginatorOptions">
+        <argument type="collection">
+          <argument key="pageParameterName">page</argument>
+          <argument key="sortFieldParameterName">sort</argument>
+          <argument key="sortDirectionParameterName">direction</argument>
+          <argument key="distinct">true</argument>
+        </argument>
+      </call>
+    </service>
+    <service id="knp_paginator.subscriber.paginate" class="Knp\Component\Pager\Event\Subscriber\Paginate\PaginationSubscriber" scope="request">
+      <tag name="knp_paginator.subscriber"/>
+    </service>
+    <service id="knp_paginator.subscriber.sortable" class="Knp\Component\Pager\Event\Subscriber\Sortable\SortableSubscriber" scope="request">
+      <tag name="knp_paginator.subscriber"/>
+    </service>
+    <service id="knp_paginator.subscriber.sliding_pagination" class="Knp\Bundle\PaginatorBundle\Subscriber\SlidingPaginationSubscriber">
+      <tag name="knp_paginator.subscriber"/>
+      <tag name="kernel.event_listener" event="kernel.request" method="onKernelRequest"/>
+      <argument type="service" id="templating"/>
+      <argument type="service" id="templating.helper.router"/>
+      <argument type="service" id="translator"/>
+      <argument type="collection">
+        <argument key="defaultPaginationTemplate">KnpPaginatorBundle:Pagination:sliding.html.twig</argument>
+        <argument key="defaultSortableTemplate">KnpPaginatorBundle:Pagination:sortable_link.html.twig</argument>
+        <argument key="defaultPageRange">5</argument>
+      </argument>
+    </service>
+    <service id="craue.form.flow" class="Craue\FormFlowBundle\Form\FormFlow" scope="request">
+      <call method="setFormFactory">
+        <argument type="service" id="form.factory"/>
+      </call>
+      <call method="setRequest">
+        <argument type="service" id="request"/>
+      </call>
+      <call method="setStorage">
+        <argument type="service" id="craue.form.flow.storage"/>
+      </call>
+      <call method="setEventDispatcher">
+        <argument type="service" id="event_dispatcher"/>
+      </call>
+    </service>
+    <service id="twig.extension.craue_formflow" class="Craue\FormFlowBundle\Twig\Extension\FormFlowExtension">
+      <tag name="twig.extension"/>
     </service>
     <service id="twig.extension.acme.demo" class="Acme\DemoBundle\Twig\Extension\DemoExtension" public="false">
       <tag name="twig.extension"/>
@@ -2613,6 +2873,28 @@
         <argument type="service">
           <service class="JMS\SecurityExtraBundle\Metadata\Driver\AnnotationDriver" public="false">
             <argument type="service" id="annotation_reader"/>
+          </service>
+        </argument>
+      </argument>
+    </service>
+    <service id="craue.form.flow.storage" class="Craue\FormFlowBundle\Storage\SessionStorage" scope="request">
+      <argument type="service" id="session"/>
+    </service>
+    <service id="knp_menu.menu_provider" class="Knp\Menu\Provider\ChainProvider">
+      <argument type="collection">
+        <argument type="service">
+          <service class="Knp\Bundle\MenuBundle\Provider\ContainerAwareProvider" public="false">
+            <tag name="knp_menu.provider"/>
+            <argument type="service" id="service_container"/>
+            <argument type="collection"/>
+          </service>
+        </argument>
+        <argument type="service">
+          <service class="Knp\Bundle\MenuBundle\Provider\BuilderAliasProvider" public="false">
+            <tag name="knp_menu.provider"/>
+            <argument type="service" id="kernel"/>
+            <argument type="service" id="service_container"/>
+            <argument type="service" id="knp_menu.factory"/>
           </service>
         </argument>
       </argument>
