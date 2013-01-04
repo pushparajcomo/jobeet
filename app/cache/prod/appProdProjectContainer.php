@@ -82,7 +82,7 @@ class appProdProjectContainer extends Container
     }
     protected function getDoctrine_Orm_DefaultEntityManagerService()
     {
-        require_once '/home/pushparaj/projects/jobeet/app/cache/prod/jms_diextra/doctrine/EntityManager_50af54a63dc6b.php';
+        require_once '/home/pushparaj/projects/jobeet/app/cache/prod/jms_diextra/doctrine/EntityManager_50e66d28e015a.php';
         $a = new \Doctrine\Common\Cache\ArrayCache();
         $a->setNamespace('sf2orm_default_9b446c3686b088529d32908ecc1fe7ca');
         $b = new \Doctrine\Common\Cache\ArrayCache();
@@ -107,7 +107,7 @@ class appProdProjectContainer extends Container
         $f->setNamingStrategy(new \Doctrine\ORM\Mapping\DefaultNamingStrategy());
         $g = call_user_func(array('Doctrine\\ORM\\EntityManager', 'create'), $this->get('doctrine.dbal.default_connection'), $f);
         $this->get('doctrine.orm.default_manager_configurator')->configure($g);
-        return $this->services['doctrine.orm.default_entity_manager'] = new \EntityManager50af54a63dc6b_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager($g, $this);
+        return $this->services['doctrine.orm.default_entity_manager'] = new \EntityManager50e66d28e015a_546a8d27f194334ee012bfe64f629947b07e4919\__CG__\Doctrine\ORM\EntityManager($g, $this);
     }
     protected function getDoctrine_Orm_DefaultManagerConfiguratorService()
     {
@@ -1459,8 +1459,8 @@ class appProdProjectContainer extends Container
             ),
             'jms_di_extra.cache_dir' => '/home/pushparaj/projects/jobeet/app/cache/prod/jms_diextra',
             'jms_di_extra.doctrine_integration' => true,
-            'jms_di_extra.doctrine_integration.entity_manager.file' => '/home/pushparaj/projects/jobeet/app/cache/prod/jms_diextra/doctrine/EntityManager_50af54a63dc6b.php',
-            'jms_di_extra.doctrine_integration.entity_manager.class' => 'EntityManager50af54a63dc6b_546a8d27f194334ee012bfe64f629947b07e4919\\__CG__\\Doctrine\\ORM\\EntityManager',
+            'jms_di_extra.doctrine_integration.entity_manager.file' => '/home/pushparaj/projects/jobeet/app/cache/prod/jms_diextra/doctrine/EntityManager_50e66d28e015a.php',
+            'jms_di_extra.doctrine_integration.entity_manager.class' => 'EntityManager50e66d28e015a_546a8d27f194334ee012bfe64f629947b07e4919\\__CG__\\Doctrine\\ORM\\EntityManager',
             'security.secured_services' => array(
             ),
             'security.access.method_interceptor.class' => 'JMS\\SecurityExtraBundle\\Security\\Authorization\\Interception\\MethodSecurityInterceptor',
